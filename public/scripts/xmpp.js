@@ -13,17 +13,19 @@ var doLogin = function(jid, password){
 
 var _anonymousLogin = null;
 var doAnonymousLogin = function(){
-  if ( null == _anonymousLogin ){
-      console.error("Cannot login anonymously!");
-  }
-  _anonymousLogin();
+    if ( null == _anonymousLogin ){
+        console.error("Cannot login anonymously!");
+        return;
+    }
+    _anonymousLogin();
 }
 
 var _sendMessage = null;
 var doSendMessage = function(message){
     if ( null == message || "" === message.trim() ||
         null == _sendMessage ){
-        console.log("Cannot send message!");
+        console.error("Cannot send message!");
+        return;
     }
     _sendMessage(message);
 }
@@ -165,10 +167,6 @@ $(window.document).ready(function() {
                   password: password
               }
           );
-          socket.on('xmpp.connection', function(data) {
-              console.log('Connected as', data.jid)
-              discoverBuddycloudServer()
-          });
       };
       _anonymousLogin = function(){
           socket.send(
@@ -177,12 +175,13 @@ $(window.document).ready(function() {
                   jid: '@anon.buddycloud.org'
               }
           );
-          socket.on('xmpp.connection', function(data) {
-              console.log('Connected as', data.jid)
-              discoverBuddycloudServer()
-          });
-      }
-  })
+      };
+  });
+
+  socket.on('xmpp.connection', function(data) {
+     console.log('Connected as', data.jid);
+     discoverBuddycloudServer();
+  });
 
   socket.on('timeout', function(reason) {
       console.error('Connection failed: ' + reason)
