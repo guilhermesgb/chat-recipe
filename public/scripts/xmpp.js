@@ -1,4 +1,16 @@
 var jid, password;
+var canLogin = false;
+
+var doLogin = function(jid, password){
+    if ( null == jid || "" == jid.trim() ||
+         null == password || "" == password.trim() ||
+ 	 !canLogin ){
+	console.error("Cannot login!");
+	return;
+    }
+    login(jid, password);
+}
+
 
 var sendMessage = function(message) {
       socket.send(
@@ -157,14 +169,7 @@ $(window.document).ready(function() {
   socket.on('open', function() {
       console.log('Connected');
       /*login(jid, password);*/
-      doLogin = function(){
-	  if ( null == jid || "" == jid ||
-               null == password || "" == password ){
-	      console.error("Cannot login!");
-	      return;
-          }
-          login(jid, password);
-      }
+      canLogin = true;
   })
 
   socket.on('timeout', function(reason) {
