@@ -4,7 +4,7 @@ $(document).ready(function() {
   });
 
   $('#btnSendMessage').click(function () {
-  	sendMessage($('#inputMessage').val());
+  	doSendMessage($('#inputMessage').val());
   });
 
   $('.list-group').empty();
