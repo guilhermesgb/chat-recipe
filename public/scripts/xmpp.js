@@ -1,3 +1,27 @@
+var jid, password;
+
+var sendMessage = function(message) {
+      socket.send(
+          'xmpp.buddycloud.publish',
+	  {
+	      "node": "/user/chatrecipe@topics.buddycloud.org/chat",
+	      "content": {
+                  "atom": {
+                      "content": message
+                  }
+              }
+	  },
+	  function(error, data) {
+	       console.log('xmpp.buddycloud.publish response arrived');
+	       if (error) console.error(error);
+	       else {
+                   console.log("Message sent.");
+               }
+          }
+      )
+  }
+
+
 $(window.document).ready(function() {
 
   //var socket = new Primus('//' + window.document.location.host)
@@ -5,28 +29,56 @@ $(window.document).ready(function() {
 
   socket.on('error', function(error) { console.error(error) })
 
-  var handleItems = function(error, items) {
-      console.log("handle items started");
-      if (error) return console.error(error)
-      $('ul.posts').empty()
-      var content
-      items.forEach(function(item) {
+  var handleItem = function(item) {
           content = '<li>'
           content += item.entry.atom.content.content
           content += '<br/>&nbsp;&nbsp;&nbsp;&nbsp;by '
           content += item.entry.atom.author.name
           content += '</li>'
           $('ul.posts').append(content)
-      })
+  }
+
+  var handleItems = function(error, items) {
+      if (error) return console.error(error)
+      $('ul.posts').empty()
+      var content
+      items.forEach(handleItem)
+  }
+
+  var getNewMessagesNotification = function() {
+      console.log("Will listen to notification of new messages");
+      socket.on('xmpp.buddycloud.push.item', function(data) {
+	  console.log("New message arrived!");
+          if ( "/user/chatrecipe@topics.buddycloud.org/chat" === data.node ){
+	      handleItem(data.item);
+	  }
+      });
+  }
+
+  var subscribeToNode = function() {
+      socket.send(
+          'xmpp.buddycloud.subscribe',
+          {
+	      "node": "/user/chatrecipe@topics.buddycloud.org/chat",
+          },
+          function(error, data) {
+	      console.log('xmpp.buddycloud.subscribe response arrived');
+	      if (error) return console.error(error);
+	      console.log("Subscribed to ChatRecipe node");
+	      getNewMessagesNotification();
+	  }
+      )
   }
 
   var getNodeItems = function() {
-      console.log("about to get node items");
       socket.send(
           'xmpp.buddycloud.retrieve',
-          { "node": '/user/chatrecipe@topics.buddycloud.org/chat', rsm: { max:5 } },
-          handleItems
-      )
+          {
+	      "node": "/user/chatrecipe@topics.buddycloud.org/chat",
+              rsm: { max:5 } 
+          },
+	  handleItems
+      );
   }
 
   var registerToBuddycloudServer = function() {
@@ -45,7 +97,7 @@ $(window.document).ready(function() {
       socket.send('xmpp.buddycloud.presence', {});
   }
 
-  var createChatRecipeNode = function() {
+  var createNode = function() {
       socket.send('xmpp.buddycloud.create',
 	  {
               node : "/user/chatrecipe@topics.buddycloud.org/chat",
@@ -57,8 +109,16 @@ $(window.document).ready(function() {
           },
 	  function(error, data) {
 	       console.log('xmpp.buddycloud.create response arrived');
-	       console.error(error);
-               console.log('Created ChatRecipe node', data);
+	       if (!error){
+                   console.log('Created ChatRecipe node', data);
+	       }
+	       else if ("cancel" === error.type &&
+                        "conflict" === error.condition){
+		   subscribeToNode();
+               }
+	       else {
+	           console.error(error);
+               }
 	       sendPresenceToBuddycloudServer();
           }
       )
@@ -74,29 +134,37 @@ $(window.document).ready(function() {
               if (error) return console.error(error);
               console.log('Discovered Buddycloud server at', data);
 	      //registerToBuddycloudServer();
-	      createChatRecipeNode();
+	      createNode();
               getNodeItems();
           }
       )
   }
 
-  var login = function() {
+  var login = function(jid, password) {
       socket.send(
           'xmpp.login',
           {
-              jid: 'abmargb@buddycloud.org',
-              password: 'abmar123'
+              jid: jid,
+              password: password
 	  }
       )
       socket.on('xmpp.connection', function(data) {
           console.log('Connected as', data.jid)
           discoverBuddycloudServer()
-      })
+      });
   }
 
   socket.on('open', function() {
-      console.log('Connected')
-      login()
+      console.log('Connected');
+      /*login(jid, password);*/
+      doLogin = function(){
+	  if ( null == jid || "" == jid ||
+               null == password || "" == password ){
+	      console.error("Cannot login!");
+	      return;
+          }
+          login(jid, password);
+      }
   })
 
   socket.on('timeout', function(reason) {
