@@ -1,6 +1,11 @@
 $(document).ready(function() {
   $('#btnLogin').click(function () {
-  	doLogin($('#inputJid').val(), $('#inputPassword').val());
+      if ( $('#anonymousCheckbox').is(':checked') ){
+          doAnonymousLogin();
+      }
+      else{
+          doLogin($('#inputJid').val(), $('#inputPassword').val());
+      }
   });
 
   $('#btnSendMessage').click(function () {
@@ -8,6 +13,18 @@ $(document).ready(function() {
   });
 
   $('.list-group').empty();
+
+  $('#anonymousCheckbox').on('change', function(){
+      if ( this.checked ){
+          $('#inputJid').prop('disabled', true);
+          $('#inputPassword').prop('disabled', true);
+      }
+      else {
+          $('#inputJid').prop('disabled', false);
+          $('#inputPassword').prop('disabled', false);
+      }
+  });
+
 });
 
 var handleItem = function(item) {

@@ -11,6 +11,14 @@ var doLogin = function(jid, password){
     _login(jid, password);
 }
 
+var _anonymousLogin = null;
+var doAnonymousLogin = function(){
+  if ( null == _anonymousLogin ){
+      console.error("Cannot login anonymously!");
+  }
+  _anonymousLogin();
+}
+
 var _sendMessage = null;
 var doSendMessage = function(message){
     if ( null == message || "" === message.trim() ||
@@ -155,6 +163,18 @@ $(window.document).ready(function() {
               {
                   jid: jid,
                   password: password
+              }
+          );
+          socket.on('xmpp.connection', function(data) {
+              console.log('Connected as', data.jid)
+              discoverBuddycloudServer()
+          });
+      };
+      _anonymousLogin = function(){
+          socket.send(
+              'xmpp.login.anonymous',
+              {
+                  jid: '@anon.buddycloud.org'
               }
           );
           socket.on('xmpp.connection', function(data) {
