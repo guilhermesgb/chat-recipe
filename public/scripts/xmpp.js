@@ -1,23 +1,23 @@
 var jid, password;
 
-var login = null;
+var _login = null;
 var doLogin = function(jid, password){
     if ( null == jid || "" === jid.trim() ||
          null == password || "" === password.trim() ||
- 	 null == login ){
+ 	 null == _login ){
 	console.error("Cannot login!");
 	return;
     }
-    login(jid, password);
+    _login(jid, password);
 }
 
-var sendMessage = null;
+var _sendMessage = null;
 var doSendMessage = function(message){
     if ( null == message || "" === message.trim() ||
-	null == sendMessage ){
+	null == _sendMessage ){
         console.log("Cannot send message!");
     }
-    sendMessage(message);
+    _sendMessage(message);
 }
 
 $(window.document).ready(function() {
@@ -134,7 +134,7 @@ $(window.document).ready(function() {
 	      //registerToBuddycloudServer();
 	      createNode();
               getNodeItems();
-	      sendMessage = function(message) {
+	      _sendMessage = function(message) {
 	          socket.send(
 	          'xmpp.buddycloud.publish',
 	              {
@@ -161,8 +161,7 @@ $(window.document).ready(function() {
 
   socket.on('open', function() {
       console.log('Connected');
-      /*login(jid, password);*/
-      login = function(jid, password) {
+      _login = function(jid, password) {
           socket.send(
               'xmpp.login',
               {
