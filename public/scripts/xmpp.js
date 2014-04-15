@@ -1,38 +1,24 @@
 var jid, password;
-var canLogin = false;
 
+var login = null;
 var doLogin = function(jid, password){
-    if ( null == jid || "" == jid.trim() ||
-         null == password || "" == password.trim() ||
- 	 !canLogin ){
+    if ( null == jid || "" === jid.trim() ||
+         null == password || "" === password.trim() ||
+ 	 null == login ){
 	console.error("Cannot login!");
 	return;
     }
     login(jid, password);
 }
 
-
-var sendMessage = function(message) {
-      socket.send(
-          'xmpp.buddycloud.publish',
-	  {
-	      "node": "/user/chatrecipe@topics.buddycloud.org/chat",
-	      "content": {
-                  "atom": {
-                      "content": message
-                  }
-              }
-	  },
-	  function(error, data) {
-	       console.log('xmpp.buddycloud.publish response arrived');
-	       if (error) console.error(error);
-	       else {
-                   console.log("Message sent.");
-               }
-          }
-      )
-  }
-
+var sendMessage = null;
+var doSendMessage = function(message){
+    if ( null == message || "" === message.trim() ||
+	null == sendMessage ){
+        console.log("Cannot send message!");
+    }
+    sendMessage(message);
+}
 
 $(window.document).ready(function() {
 
@@ -148,28 +134,47 @@ $(window.document).ready(function() {
 	      //registerToBuddycloudServer();
 	      createNode();
               getNodeItems();
+	      sendMessage = function(message) {
+	          socket.send(
+	          'xmpp.buddycloud.publish',
+	              {
+	                  "node": "/user/chatrecipe@topics.buddycloud.org/chat",
+	                  "content": {
+                              "atom": {
+                                  "content": message
+                              }
+                          }
+	              },
+	              function(error, data) {
+	                   console.log('xmpp.buddycloud.publish response arrived');
+	                   if (error) console.error(error);
+	                   else {
+                               console.log("Message sent.");
+		               getNodeItems();
+                           }
+                      }
+              	  )
+	      }
           }
       )
-  }
-
-  var login = function(jid, password) {
-      socket.send(
-          'xmpp.login',
-          {
-              jid: jid,
-              password: password
-	  }
-      )
-      socket.on('xmpp.connection', function(data) {
-          console.log('Connected as', data.jid)
-          discoverBuddycloudServer()
-      });
   }
 
   socket.on('open', function() {
       console.log('Connected');
       /*login(jid, password);*/
-      canLogin = true;
+      login = function(jid, password) {
+          socket.send(
+              'xmpp.login',
+              {
+                  jid: jid,
+                  password: password
+	      }
+          );
+          socket.on('xmpp.connection', function(data) {
+              console.log('Connected as', data.jid)
+              discoverBuddycloudServer()
+          });
+      }
   })
 
   socket.on('timeout', function(reason) {
