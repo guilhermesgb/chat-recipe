@@ -1,4 +1,4 @@
-var node = "/user/chatrecipe@topics.buddycloud.org/chat";
+var node = "/user/chat-room@topics.buddycloud.org/chat";
 
 var _login = null;
 var doLogin = function(jid, password){
@@ -46,7 +46,7 @@ $(window.document).ready(function() {
           function(error, data) {
           console.log('xmpp.buddycloud.subscribe response arrived');
           if (error) return console.error(error);
-              console.log("Subscribed to ChatRecipe node");
+              console.log("Subscribed to Chat Room node");
           }
       )
   }
@@ -96,7 +96,7 @@ $(window.document).ready(function() {
       function(error, data) {
           console.log('xmpp.buddycloud.create response arrived');
           if (!error){
-              console.log('Created ChatRecipe node', data);
+              console.log('Created Chat Room node', data);
           }
           else if ("cancel" === error.type &&
                    "conflict" === error.condition){
