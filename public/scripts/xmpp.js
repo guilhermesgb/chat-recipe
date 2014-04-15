@@ -1,10 +1,12 @@
 $(window.document).ready(function() {
 
-  var socket = new Primus('//' + window.document.location.host)
+  //var socket = new Primus('//' + window.document.location.host)
+  var socket = new Primus('https://xmpp-ftw.jit.su')
 
   socket.on('error', function(error) { console.error(error) })
 
   var handleItems = function(error, items) {
+      console.log("handle items started");
       if (error) return console.error(error)
       $('ul.posts').empty()
       var content
@@ -19,10 +21,46 @@ $(window.document).ready(function() {
   }
 
   var getNodeItems = function() {
+      console.log("about to get node items");
       socket.send(
           'xmpp.buddycloud.retrieve',
-          { node: '/user/team@topics.buddycloud.org/posts', rsm: { max: 5 } },
+          { "node": '/user/chatrecipe@topics.buddycloud.org/chat', rsm: { max:5 } },
           handleItems
+      )
+  }
+
+  var registerToBuddycloudServer = function() {
+      socket.send(
+          'xmpp.buddycloud.register',
+	  {},
+	  function(error, data) {
+		console.log('xmpp.buddycloud.register response arrived');
+		if (error) return console.error(error)
+		console.log('Registered to Buddycloud server', data);
+	  }
+      )
+  }
+
+  var sendPresenceToBuddycloudServer = function() {
+      socket.send('xmpp.buddycloud.presence', {});
+  }
+
+  var createChatRecipeNode = function() {
+      socket.send('xmpp.buddycloud.create',
+	  {
+              node : "/user/chatrecipe@topics.buddycloud.org/chat",
+	      options: [
+		{ "var": "buddycloud#channel_type", value : "topic" },
+		{ "var": "pubsub#title", value : "Chat Topic Channel" },
+		{ "var": "pubsub#access_model", value : "open" }
+	      ]
+          },
+	  function(error, data) {
+	       console.log('xmpp.buddycloud.create response arrived');
+	       console.error(error);
+               console.log('Created ChatRecipe node', data);
+	       sendPresenceToBuddycloudServer();
+          }
       )
   }
 
@@ -30,18 +68,25 @@ $(window.document).ready(function() {
       socket.send(
           'xmpp.buddycloud.discover',
           { server: 'channels.buddycloud.org' },
+	 /* {},*/
           function(error, data) {
-              if (error) return console.error(error)
-              console.log('Discovered Buddycloud server at', data)
-              getNodeItems()
+              console.log('xmpp.buddycloud.discover response arrived');
+              if (error) return console.error(error);
+              console.log('Discovered Buddycloud server at', data);
+	      //registerToBuddycloudServer();
+	      createChatRecipeNode();
+              getNodeItems();
           }
       )
   }
 
   var login = function() {
       socket.send(
-          'xmpp.login.anonymous',
-          { jid: '@anon.buddycloud.org' }
+          'xmpp.login',
+          {
+              jid: 'abmargb@buddycloud.org',
+              password: 'abmar123'
+	  }
       )
       socket.on('xmpp.connection', function(data) {
           console.log('Connected as', data.jid)
