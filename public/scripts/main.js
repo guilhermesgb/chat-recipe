@@ -10,11 +10,15 @@ $(document).ready(function() {
   $('.list-group').empty();
 });
 
-var handleItems = function(items) {
+var handleItem = function(item) {
+  var content = "<li class=\"list-group-item\"><span " +  
+      "class=\"badge pull-left\">" + item.entry.atom.author.name + 
+      "</span><br><h4>" + item.entry.atom.content.content + "</h4></li>";
+  $('.list-group').append(content);
+};
+
+var handleItems = function(error, items) {
   items.forEach(function(item) {
-  	var content = "<li class=\"list-group-item\"><span " +  
-        "class=\"badge pull-left\">" + item.entry.atom.author.name + 
-        "</span><br><h4>" + item.entry.atom.content.content + "</h4></li>";
-    $('.list-group').append(content)
+    handleItem(item);
   });
 };

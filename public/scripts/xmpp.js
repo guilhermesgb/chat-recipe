@@ -1,4 +1,3 @@
-var jid, password;
 
 var _login = null;
 var doLogin = function(jid, password){
@@ -27,22 +26,6 @@ $(window.document).ready(function() {
 
   socket.on('error', function(error) { console.error(error) })
 
-  var handleItem = function(item) {
-          content = '<li>'
-          content += item.entry.atom.content.content
-          content += '<br/>&nbsp;&nbsp;&nbsp;&nbsp;by '
-          content += item.entry.atom.author.name
-          content += '</li>'
-          $('ul.posts').append(content)
-  }
-
-  var handleItems = function(error, items) {
-      if (error) return console.error(error)
-      $('ul.posts').empty()
-      var content
-      items.forEach(handleItem)
-  }
-
   var getNewMessagesNotification = function() {
       console.log("Will listen to notification of new messages");
       socket.on('xmpp.buddycloud.push.item', function(data) {
@@ -68,14 +51,18 @@ $(window.document).ready(function() {
       )
   }
 
-  var getNodeItems = function() {
+  var getNodeItems = function(itemId) {
+      var data = {
+        node: "/user/chatrecipe@topics.buddycloud.org/chat",
+        rsm: { max:5 } 
+      }
+      if (itemId) {
+        data['id'] = itemId;
+      }
       socket.send(
           'xmpp.buddycloud.retrieve',
-          {
-	      "node": "/user/chatrecipe@topics.buddycloud.org/chat",
-              rsm: { max:5 } 
-          },
-	  handleItems
+          data,
+	        handleItems
       );
   }
 
@@ -150,7 +137,7 @@ $(window.document).ready(function() {
 	                   if (error) console.error(error);
 	                   else {
                                console.log("Message sent.");
-		               getNodeItems();
+		               getNodeItems(data.id);
                            }
                       }
               	  )
