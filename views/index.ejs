@@ -1,58 +1,52 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="stylesheet" type="text/css" href="/css/style.css">
-        <script type="text/javascript" src="/scripts/primus.js"></script>
-        <script type="text/javascript"
-                src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
-        <script type="text/javascript" src="/scripts/xmpp.js"></script>
-    </head>
-    <body>
-    <div id="container">
-        <h1>Welcome to my XMPP-FTW project</h1>
-
-        <p>Please see <a href="https://github.com/xmpp-ftw/skeleton-project.git">github</a> for more information.</p>
-
-        <h2>Getting started</h2>
-
-        <p>To quickly get started perform the following actions:</p>
-
-        <pre>
-            git clone git@github.com:xmpp-ftw/skeleton-project.git
-            cd skeleton-project
-            npm i .
-            npm start &amp;
-            open http://localhost:3000
-        </pre>
-
-        <h2>Adding additional XMPP-FTW modules</h2>
-
-        <p>To use the additional module you wish to use do the following:</p>
-
-        <pre>
-            npm i --save xmpp-ftw-&lt;project&gt;
-        </pre>
-
-        <p>Then add the following call at <a href="https://github.com/xmpp-ftw/skeleton-project/blob/master/index.js#L48"><strong>line 48</strong> in <em>index.js</em></a>:</p>
-
-        <pre>
-            var Module = require('xmpp-ftw-&lt;project&gt;')
-            xmppFtw.addListener(new Module())
-        </pre>
-
-        <h2>Example</h2>
-
-        <p>The code anonymously connects to <a href="http://buddycloud.com">Buddycloud.com</a> and pulls the latest 5 posts from the development channel.</p>
-
-        <p>Please see the <a href="https://github.com/xmpp-ftw/skeleton-project/blob/master/views/index.ejs">source of this file</a> for the code.</p>
-
-        <h3>Posts</h3>
-
-        <ul class="posts"><li><em>Will appear here</em></li></ul>
-
-        <p>...or see the real posts at the <a href="https://demo.buddycloud.org/team@topics.buddycloud.org">Buddycloud developer channel</a>.</p>
-
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>
+    </title>
+    <script type="text/javascript" src="/scripts/primus.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <script type="text/javascript" src="/scripts/xmpp.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 30px;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div class="container">
+      <form class="form-inline" role="form">
+        <div class="form-group">
+          <input type="text" class="form-control" id="inputJid" placeholder="jid">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" id="inputPassword" placeholder="password">
+        </div>
+        <button type="submit" class="btn btn-default">Login</button>
+      </form>
+      <ul class="list-group">
+        <li class="list-group-item">
+          <span class="badge pull-left">@abmargb</span>
+          <br>
+          <h4>Hello</h4>
+        </li>
+        <li class="list-group-item">
+          <span class="badge pull-left">@guilherme</span>
+          <br>
+          <h4>Hi</h4>
+        </li>
+      </ul>
+      <form class="form-inline" role="form">
+        <div class="form-group form-input">
+          <input type="text" class="form-control" id="inputMessage" placeholder="Enter message">
+        </div>
+        <button type="submit" class="btn btn-default">Send</button>
+      </form>
     </div>
-    </body>
+
+  </body>
 </html>
