@@ -10,6 +10,7 @@ $(document).ready(function() {
 
   $('#btnSendMessage').click(function () {
   	doSendMessage($('#inputMessage').val());
+        $('#inputMessage').empty();
   });
 
   $('.list-group').empty();
@@ -35,7 +36,19 @@ var handleItem = function(item) {
 };
 
 var handleItems = function(error, items) {
-  items.forEach(function(item) {
+  items.reverse().forEach(function(item) {
     handleItem(item);
   });
 };
+
+var doHandleItems = function(erase) {
+  if (erase) {
+      return function(error, items) {
+          $('.list-group').empty();
+          handleItems(error, items);
+      }
+  }
+  return function(error, items) {
+      handleItems(error, items);
+  }
+}

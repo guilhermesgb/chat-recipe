@@ -63,8 +63,8 @@ $(window.document).ready(function() {
 
   var getNodeItems = function(itemId) {
       var data = {
-        node: node,
-        rsm: { max:5 } 
+        node: node/*,
+        rsm: { max:5 }*/ 
       }
       if (itemId) {
         data['id'] = itemId;
@@ -72,7 +72,7 @@ $(window.document).ready(function() {
       socket.send(
           'xmpp.buddycloud.retrieve',
           data,
-          handleItems
+          itemId ? doHandleItems(erase=false) : doHandleItems(erase=true)
       );
   }
 
