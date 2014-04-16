@@ -29,6 +29,7 @@ $(document).ready(function() {
 });
 
 var handleItem = function(item) {
+  console.log(item);
   var content = "<li class=\"list-group-item\"><span " +  
       "class=\"badge pull-left\">" + item.entry.atom.author.name + 
       "</span><br><h4>" + item.entry.atom.content.content + "</h4></li>";
@@ -37,6 +38,7 @@ var handleItem = function(item) {
 
 var handleItems = function(error, items) {
   items.reverse().forEach(function(item) {
+    console.log(item);
     handleItem(item);
   });
 };

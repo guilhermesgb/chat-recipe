@@ -32,17 +32,17 @@ var doSendMessage = function(message){
 
 $(window.document).ready(function() {
 
-  //var socket = new Primus('//' + window.document.location.host)
-  var socket = new Primus('https://xmpp-ftw.jit.su')
+  var socket = new Primus('//' + window.document.location.host)
+  //var socket = new Primus('https://xmpp-ftw.jit.su')
 
   socket.on('error', function(error) { console.error(error) })
 
   var getNewMessagesNotification = function() {
       console.log("Will listen to notification of new messages");
       socket.on('xmpp.buddycloud.push.item', function(data) {
-      console.log("New message arrived!");
+          console.log("New message arrived!", data);
           if ( node === data.node ){
-              handleItem(data.item);
+              handleItem(data);
           }
       });
   }
@@ -148,7 +148,7 @@ $(window.document).ready(function() {
                           if (error) console.error(error);
                           else {
                               console.log("Message sent.");
-                              getNodeItems(data.id);
+                              //getNodeItems(data.id);
                           }
                       }
                   );
