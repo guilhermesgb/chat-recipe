@@ -10,6 +10,7 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
     <script type="text/javascript" src="/scripts/xmpp.js"></script>
     <script type="text/javascript" src="/scripts/main.js"></script>
+    <script type="text/javascript" src="/scripts/register.js"></script>
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
     <style>
       body {
@@ -34,6 +35,16 @@
               Anonymous login?
           </label>
         </div>
+      </form>
+      <form id="registrationForm" class="form-inline" role="form">
+        <div class="form-group">
+          <input type="text" class="form-control" id="inputUsername" placeholder="nick" >
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" id="inputRegisterPassword" placeholder="password" >
+          <input type="password" class="form-control" id="inputConfirmPassword" placeholder="retype password" >
+        </div>
+        <button type="button" class="btn btn-default" id="btnRegister">Register</button>
       </form>
       <ul class="list-group">
         <li class="list-group-item">

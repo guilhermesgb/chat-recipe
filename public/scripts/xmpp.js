@@ -34,6 +34,7 @@ $(window.document).ready(function() {
 
   var socket = new Primus('//' + window.document.location.host)
   //var socket = new Primus('https://xmpp-ftw.jit.su')
+  //var socket = new Primus('https://xmpp-ftw.buddycloud.com')
 
   socket.on('error', function(error) { console.error(error) })
 
@@ -63,8 +64,8 @@ $(window.document).ready(function() {
 
   var getNodeItems = function(itemId) {
       var data = {
-        node: node/*,
-        rsm: { max:5 }*/ 
+        node: node,
+        rsm: { max:6 } 
       }
       if (itemId) {
         data['id'] = itemId;

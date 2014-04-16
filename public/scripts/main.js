@@ -8,6 +8,16 @@ $(document).ready(function() {
       }
   });
 
+  $('#btnRegister').click(function () {
+      var confirmPassword = $('#inputConfirmPassword').val(); 
+      if ( $('#inputRegisterPassword').val() == confirmPassword ){
+          doRegisterUser($('#inputUsername').val(), confirmPassword);
+      }
+      else {
+          window.alert("Password on both fields must match!");
+      }
+  });
+
   $('#btnSendMessage').click(function () {
   	doSendMessage($('#inputMessage').val());
         $('#inputMessage').empty();
