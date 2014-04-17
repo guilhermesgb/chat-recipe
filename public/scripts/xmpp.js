@@ -198,11 +198,11 @@ $(window.document).ready(function() {
   
   socket.on('xmpp.error', function(error) {
       console.error('XMPP-FTW error', error);
-      if (error.description.contains("XMPP authentication failure")){
+      if (error.description.indexOf("XMPP authentication failure") != -1){
           window.alert('Could not authenticate!');
           showLoginFailed();
       }
-      if (error.description.contains("ENOTFOUND")){
+      if (error.description.indexOf("ENOTFOUND") != -1){
           window.alert('You probably missed the domain part of the jid (username@domain)');
           showLoginFailed();
       }
