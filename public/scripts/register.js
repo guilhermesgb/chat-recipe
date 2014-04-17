@@ -23,6 +23,7 @@ $(window.document).ready(function() {
           data: "{\"username\": \""+jid+"\", \"password\": \""+password+"\", \"email\": \"email@email.com\"}",
           success: function(data) {
               window.alert(jid + " registered successfully!");
+              $("#toggleRegistrationForm").click();
           },
           error: function(jqXHR) {
               $.ajax({

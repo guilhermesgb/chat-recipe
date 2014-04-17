@@ -6,6 +6,7 @@ var doLogin = function(jid, password){
         null == password || "" === password.trim() ||
         null == _login ){
         console.error("Cannot login!");
+        showLoginFailed();
         return;
     }
     _login(jid, password);
@@ -65,7 +66,7 @@ $(window.document).ready(function() {
   var getNodeItems = function(itemId) {
       var data = {
         node: node,
-        rsm: { max:6 } 
+        rsm: { max:5 } 
       }
       if (itemId) {
         data['id'] = itemId;
@@ -182,6 +183,8 @@ $(window.document).ready(function() {
   socket.on('xmpp.connection', function(data) {
      console.log('Connected as', data.jid);
      discoverBuddycloudServer();
+     showMessageForm();
+     hideLoginForm();
   });
 
   socket.on('timeout', function(reason) {
@@ -194,7 +197,11 @@ $(window.document).ready(function() {
   })
   
   socket.on('xmpp.error', function(error) {
-      console.error('XMPP-FTW error', error)
+      console.error('XMPP-FTW error', error);
+      if ("\"XMPP authentication failure\"" === error.description){
+          window.alert('Could not authenticate!');
+          showLoginFailed();
+      }
   })
   
   socket.on('xmpp.error.client', function(error) {

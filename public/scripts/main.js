@@ -6,6 +6,7 @@ $(document).ready(function() {
       else{
           doLogin($('#inputJid').val(), $('#inputPassword').val());
       }
+      $('#btnLogin').text("Please wait...");
   });
 
   $('#btnRegister').click(function () {
@@ -20,7 +21,7 @@ $(document).ready(function() {
 
   $('#btnSendMessage').click(function () {
   	doSendMessage($('#inputMessage').val());
-        $('#inputMessage').empty();
+        $('#inputMessage').val("");
   });
 
   $('.list-group').empty();
@@ -36,19 +37,39 @@ $(document).ready(function() {
       }
   });
 
+  $('#toggleRegistrationForm').click(function(){
+      $('#registrationForm').toggle("slow");
+      $('#loginForm').toggle("slow");
+  });
+
 });
 
+var showMessageForm = function() {
+  $('#messageForm').toggle(true, "slow");
+};
+
+var hideLoginForm = function() {
+  $('#btnLogin').text("Login");
+  $('#loginForm').toggle(false, "slow");
+  $('#toggleRegistrationForm').toggle(false, "slow");
+}
+
+var showLoginFailed = function() {
+  $('#btnLogin').text("Login");
+}
+
 var handleItem = function(item) {
-  console.log(item);
   var content = "<li class=\"list-group-item\"><span " +  
       "class=\"badge pull-left\">" + item.entry.atom.author.name + 
       "</span><br><h4>" + item.entry.atom.content.content + "</h4></li>";
   $('.list-group').append(content);
+  if ($('.list-group-item').length > 5){
+      $('.list-group li').first().remove();
+  }
 };
 
 var handleItems = function(error, items) {
   items.reverse().forEach(function(item) {
-    console.log(item);
     handleItem(item);
   });
 };

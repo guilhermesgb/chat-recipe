@@ -24,3 +24,7 @@ ul li {
 ul {
     margin-left: 50px;
 }
+
+#toggleRegistrationForm{
+    cursor: pointer;
+}
