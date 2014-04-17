@@ -2,14 +2,14 @@ var apiLocation = "https://demo.buddycloud.org/api";
 
 var _registerUser = null;
 var doRegisterUser = function(username, password) {
-    if ( null == username || "" === username.trim() ||
-        null == password || "" === password.trim() ||
-        null == _registerUser ){
+    if ( null === username || "" === username.trim() ||
+        null === password || "" === password.trim() ||
+        null === _registerUser ){
         window.alert("Cannot register user!");
         return;
     }
     _registerUser(username, password);
-}
+};
 
 $(window.document).ready(function() {
 
@@ -42,5 +42,5 @@ $(window.document).ready(function() {
               }); 
           }
       });
-  }
+  };
 });
