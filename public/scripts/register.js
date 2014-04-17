@@ -20,7 +20,11 @@ $(window.document).ready(function() {
           url: apiLocation + "/account",
           contentType: "application/json",
           processData: true,
-          data: "{\"username\": \""+jid+"\", \"password\": \""+password+"\", \"email\": \"email@email.com\"}",
+          data: JSON.stringify({
+                  username: jid,
+                  password: password,
+                  email: "email@email.com"
+          }),
           success: function(data) {
               window.alert(jid + " registered successfully!");
               $("#toggleRegistrationForm").click();

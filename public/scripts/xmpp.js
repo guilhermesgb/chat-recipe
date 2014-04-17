@@ -125,8 +125,7 @@ $(window.document).ready(function() {
   var discoverBuddycloudServer = function() {
       socket.send(
           'xmpp.buddycloud.discover',
-          { server: 'channels.buddycloud.org' },
-          /* {},*/
+          {},
           function(error, data) {
               console.log('xmpp.buddycloud.discover response arrived');
               if (error) return console.error(error);
@@ -183,7 +182,8 @@ $(window.document).ready(function() {
   socket.on('xmpp.connection', function(data) {
      console.log('Connected as', data.jid);
      discoverBuddycloudServer();
-     showMessageForm(data.jid);
+     var jid = [data.jid.local,"@",data.jid.domain].join(' ');
+     showMessageForm(jid);
      hideLoginForm();
   });
 
@@ -200,6 +200,10 @@ $(window.document).ready(function() {
       console.error('XMPP-FTW error', error);
       if ("\"XMPP authentication failure\"" === error.description){
           window.alert('Could not authenticate!');
+          showLoginFailed();
+      }
+      if ("{\"code\":\"ENOTFOUND\",\"errno\":\"ENOTFOUND\",\"syscall\":\"getaddrinfo\"}" === error.description){
+          window.alert('You probably missed the domain part of the jid (username@domain)');
           showLoginFailed();
       }
   })
