@@ -65,7 +65,7 @@ $(window.document).ready(function() {
       var data = {
         node: node,
         rsm: { max:5 } 
-      }
+      };
       if (itemId) {
         data.id = itemId;
       }
@@ -82,8 +82,8 @@ $(window.document).ready(function() {
           {},
           function(error, data) {
               console.log('xmpp.buddycloud.register response arrived');
-              if (error) return console.error(error)
-                  console.log('Registered to Buddycloud server', data);
+              if (error) return console.error(error);
+              console.log('Registered to Buddycloud server', data);
           }
       );
   };
@@ -151,7 +151,7 @@ $(window.document).ready(function() {
                           }
                       }
                   );
-              }
+              };
           }
       );
   };
@@ -207,6 +207,6 @@ $(window.document).ready(function() {
   });
   
   socket.on('xmpp.error.client', function(error) {
-      console.error('XMPP-FTW client error', error)
+      console.error('XMPP-FTW client error', error);
   });
 });
