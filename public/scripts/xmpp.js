@@ -2,42 +2,40 @@ var node = "/user/chat-room@topics.buddycloud.org/chat";
 
 var _login = null;
 var doLogin = function(jid, password){
-    if ( null == jid || "" === jid.trim() ||
-        null == password || "" === password.trim() ||
-        null == _login ){
+    if ( null === jid || "" === jid.trim() ||
+        null === password || "" === password.trim() ||
+        null === _login ){
         console.error("Cannot login!");
         showLoginFailed();
         return;
     }
     _login(jid, password);
-}
+};
 
 var _anonymousLogin = null;
 var doAnonymousLogin = function(){
-    if ( null == _anonymousLogin ){
+    if ( null === _anonymousLogin ){
         console.error("Cannot login anonymously!");
         return;
     }
     _anonymousLogin();
-}
+};
 
 var _sendMessage = null;
 var doSendMessage = function(message){
-    if ( null == message || "" === message.trim() ||
-        null == _sendMessage ){
+    if ( null === message || "" === message.trim() ||
+        null === _sendMessage ){
         window.alert("Cannot send message!");
         return;
     }
     _sendMessage(message);
-}
+};
 
 $(window.document).ready(function() {
 
-  var socket = new Primus('//' + window.document.location.host)
-  //var socket = new Primus('https://xmpp-ftw.jit.su')
-  //var socket = new Primus('https://xmpp-ftw.buddycloud.com')
+  var socket = new Primus('//' + window.document.location.host);
 
-  socket.on('error', function(error) { console.error(error) })
+  socket.on('error', function(error) { console.error(error); });
 
   var getNewMessagesNotification = function() {
       console.log("Will listen to notification of new messages");
@@ -47,7 +45,7 @@ $(window.document).ready(function() {
               handleItem(data);
           }
       });
-  }
+  };
 
   var subscribeToNode = function() {
       socket.send(
@@ -60,8 +58,8 @@ $(window.document).ready(function() {
           if (error) return console.error(error);
               console.log("Subscribed to Chat Room node");
           }
-      )
-  }
+      );
+  };
 
   var getNodeItems = function(itemId) {
       var data = {
@@ -69,14 +67,14 @@ $(window.document).ready(function() {
         rsm: { max:5 } 
       }
       if (itemId) {
-        data['id'] = itemId;
+        data.id = itemId;
       }
       socket.send(
           'xmpp.buddycloud.retrieve',
           data,
           itemId ? doHandleItems(erase=false) : doHandleItems(erase=true)
       );
-  }
+  };
 
   var registerToBuddycloudServer = function() {
       socket.send(
@@ -87,12 +85,12 @@ $(window.document).ready(function() {
               if (error) return console.error(error)
                   console.log('Registered to Buddycloud server', data);
           }
-      )
-  }
+      );
+  };
 
   var sendPresenceToBuddycloudServer = function() {
       socket.send('xmpp.buddycloud.presence', {});
-  }
+  };
 
   var createNode = function() {
       socket.send('xmpp.buddycloud.create',
@@ -120,7 +118,7 @@ $(window.document).ready(function() {
           getNewMessagesNotification();
           sendPresenceToBuddycloudServer();
       });
-  }
+  };
 
   var discoverBuddycloudServer = function() {
       socket.send(
@@ -155,8 +153,8 @@ $(window.document).ready(function() {
                   );
               }
           }
-      )
-  }
+      );
+  };
 
   socket.on('open', function() {
       console.log('Connected');
@@ -188,13 +186,13 @@ $(window.document).ready(function() {
   });
 
   socket.on('timeout', function(reason) {
-      console.error('Connection failed: ' + reason)
-  })
+      console.error('Connection failed: ' + reason);
+  });
 
   socket.on('end', function() {
-      console.log('Socket connection closed')
-      socket = null
-  })
+      console.log('Socket connection closed');
+      socket = null;
+  });
   
   socket.on('xmpp.error', function(error) {
       console.error('XMPP-FTW error', error);
@@ -206,9 +204,9 @@ $(window.document).ready(function() {
           window.alert('You probably missed the domain part of the jid (username@domain)');
           showLoginFailed();
       }
-  })
+  });
   
   socket.on('xmpp.error.client', function(error) {
       console.error('XMPP-FTW client error', error)
-  })
-})
+  });
+});
