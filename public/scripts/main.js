@@ -20,8 +20,8 @@ $(document).ready(function() {
   });
 
   $('#btnSendMessage').click(function () {
-  	doSendMessage($('#inputMessage').val());
-        $('#inputMessage').val("");
+      doSendMessage($('#inputMessage').val());
+      $('#inputMessage').val("");
   });
 
   $('.list-group').empty();
@@ -53,11 +53,11 @@ var hideLoginForm = function() {
   $('#btnLogin').text("Login");
   $('#loginForm').toggle(false, "slow");
   $('#toggleRegistrationForm').toggle(false, "slow");
-}
+};
 
 var showLoginFailed = function() {
   $('#btnLogin').text("Login");
-}
+};
 
 var handleItem = function(item) {
   var content = "<li class=\"list-group-item\"><span " +  
@@ -80,9 +80,9 @@ var doHandleItems = function(erase) {
       return function(error, items) {
           $('.list-group').empty();
           handleItems(error, items);
-      }
+      };
   }
   return function(error, items) {
       handleItems(error, items);
-  }
-}
+  };
+};
