@@ -25,7 +25,7 @@ var _sendMessage = null;
 var doSendMessage = function(message){
     if ( null == message || "" === message.trim() ||
         null == _sendMessage ){
-        console.error("Cannot send message!");
+        window.alert("Cannot send message!");
         return;
     }
     _sendMessage(message);
