@@ -183,7 +183,7 @@ $(window.document).ready(function() {
   socket.on('xmpp.connection', function(data) {
      console.log('Connected as', data.jid);
      discoverBuddycloudServer();
-     showMessageForm();
+     showMessageForm(data.jid);
      hideLoginForm();
   });
 

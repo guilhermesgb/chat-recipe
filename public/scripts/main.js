@@ -44,7 +44,8 @@ $(document).ready(function() {
 
 });
 
-var showMessageForm = function() {
+var showMessageForm = function(jid) {
+  $('#inputMessageLabel').text([jid, "says:"].join(' '));
   $('#messageForm').toggle(true, "slow");
 };
 
